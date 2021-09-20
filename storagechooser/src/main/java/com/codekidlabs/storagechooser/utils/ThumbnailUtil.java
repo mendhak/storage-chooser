@@ -109,6 +109,9 @@ public class ThumbnailUtil {
             case PDF_FILE:
                 imageView.setImageDrawable(getDrawableFromRes(R.drawable.pdf));
                 break;
+            default:
+                imageView.setImageDrawable(getDrawableFromRes(R.drawable.unknownfile));
+                break;
         }
     }
 
