@@ -29,6 +29,7 @@ import com.codekidlabs.storagechooser.utils.MemoryUtil;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -246,7 +247,21 @@ public class ChooserDialogFragment extends android.app.DialogFragment {
         File storageDir = new File("/storage");
         String internalStoragePath = Environment.getExternalStorageDirectory().getAbsolutePath();
 
-        File[] volumeList = storageDir.listFiles();
+        File[] volumeList;
+        if (android.os.Build.VERSION.SDK_INT >= 30) {
+            File[] filesDirs = getActivity().getApplicationContext().getExternalFilesDirs(null);
+            List<File> filePaths = new ArrayList<File>();
+            for(File f : filesDirs){
+                if(!f.getPath().startsWith(internalStoragePath)) {
+                    filePaths.add(f.toPath().subpath(0, 2).toFile());
+                }
+            }
+            volumeList = filePaths.toArray(new File[0]);
+        }
+        else {
+            volumeList = storageDir.listFiles();
+        }
+
 
         Storages storages = new Storages();
 
