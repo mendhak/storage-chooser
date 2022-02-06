@@ -94,22 +94,26 @@ public class UniversalFileFilter implements FileFilter {
             return false;
         } else {
             final ArrayList<File> sub = new ArrayList<File>();
-            int indexInList = dir.listFiles(new FileFilter() {
 
-                @Override
-                public boolean accept(File file) {
-                    if (file.isFile()) {
-                        if (file.getName().equals(".nomedia"))
+            int indexInList = 0;
+            if(dir.listFiles() != null){
+                indexInList = dir.listFiles(new FileFilter() {
+
+                    @Override
+                    public boolean accept(File file) {
+                        if (file.isFile()) {
+                            if (file.getName().equals(".nomedia"))
+                                return false;
+
+                            return isFileExtension(file);
+                        } else if (file.isDirectory()) {
+                            sub.add(file);
                             return false;
-
-                        return isFileExtension(file);
-                    } else if (file.isDirectory()) {
-                        sub.add(file);
-                        return false;
-                    } else
-                        return false;
-                }
-            }).length;
+                        } else
+                            return false;
+                    }
+                }).length;
+            }
 
             if (indexInList > 0) {
                 Log.i(TAG, "findInDirectory => " + dir.getName() + " return true for => " + indexInList);
